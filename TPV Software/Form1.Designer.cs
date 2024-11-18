@@ -35,6 +35,7 @@
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
+            label5 = new Label();
             SuspendLayout();
             // 
             // button1
@@ -65,6 +66,7 @@
             // 
             textBox2.Location = new Point(247, 288);
             textBox2.Name = "textBox2";
+            textBox2.PasswordChar = '*';
             textBox2.Size = new Size(257, 23);
             textBox2.TabIndex = 2;
             // 
@@ -114,12 +116,26 @@
             label4.TabIndex = 6;
             label4.Text = "Enter your information to login in your account";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.BackColor = SystemColors.ControlLightLight;
+            label5.Font = new Font("Segoe UI", 8F);
+            label5.ForeColor = Color.Red;
+            label5.Location = new Point(291, 373);
+            label5.Name = "label5";
+            label5.Size = new Size(177, 13);
+            label5.TabIndex = 7;
+            label5.Text = "Usuario o contraseña incorrectos";
+            label5.Visible = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLightLight;
             ClientSize = new Size(724, 460);
+            Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -144,5 +160,6 @@
         private Label label2;
         private Label label3;
         private Label label4;
+        private Label label5;
     }
 }

@@ -39,12 +39,15 @@ namespace TPV_Software
             }
 
             //Vista para el Usuario
-            if (textboxlogin == usuario && UserContra == textboxloginpwd)
+            else if (textboxlogin == usuario && UserContra == textboxloginpwd)
             {
                 MessageBox.Show("Bienvenido Usuario");
                 Form3 form3 = new Form3();
                 form3.Show();
                 this.Hide();
+            }
+            else {
+                label5.Visible = true;
             }
         }
     }
