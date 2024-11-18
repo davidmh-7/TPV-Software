@@ -1,54 +1,87 @@
+using System;
+using System.Data;
+using System.Data.OleDb;
+using System.Windows.Forms;
+
 namespace TPV_Software
 {
     public partial class Form1 : Form
     {
-
-        private string usuario= "user";
-        private string Admin= "admin";
-        private string AdminContra= "admin";
-        private string UserContra="12345";
+        // Ruta de tu base de datos (actualízala con la ubicación real del archivo .accdb)
+        private string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\2dam3\Documents\Database1.accdb;";
 
         public Form1()
         {
             InitializeComponent();
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //Vista para el administrador
+            // Obtener el texto de los TextBox
             string textboxlogin = textBox1.Text;
             string textboxloginpwd = textBox2.Text;
 
-            if (textboxlogin == Admin && AdminContra == textboxloginpwd)
+            // Llamar a la función de autenticación
+            string rol = AutenticarUsuario(textboxlogin, textboxloginpwd);
+
+            // Verificar el rol y abrir la vista correspondiente
+            if (rol == "admin")
             {
-                MessageBox.Show("Bienvenido Administrador");
                 Form2 form2 = new Form2();
                 form2.Show();
                 this.Hide();
             }
-
-            //Vista para el Usuario
-            else if (textboxlogin == usuario && UserContra == textboxloginpwd)
+            else if (rol == "usuario")
             {
-                MessageBox.Show("Bienvenido Usuario");
                 Form3 form3 = new Form3();
                 form3.Show();
                 this.Hide();
             }
-            else {
-                label5.Visible = true;
+            else
+            {
+                label5.Visible = true; 
             }
+        }
+
+        private string AutenticarUsuario(string username, string password)
+        {
+            string rol = null;
+            try
+            {
+                using (OleDbConnection connection = new OleDbConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT rol FROM usuarios WHERE user = @username AND password = @password";
+
+                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    {
+                        // Parametrizar la consulta para evitar inyección SQL
+                        command.Parameters.AddWithValue("@username", username);
+                        command.Parameters.AddWithValue("@password", password);
+
+                        // Ejecutar la consulta y obtener el rol
+                        object result = command.ExecuteScalar();
+                        if (result != null)
+                        {
+                            rol = result.ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error de conexión: " + ex.Message);
+            }
+            return rol;
+        }
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

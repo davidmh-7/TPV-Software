@@ -36,6 +36,7 @@
             label3 = new Label();
             label4 = new Label();
             label5 = new Label();
+            label6 = new Label();
             SuspendLayout();
             // 
             // button1
@@ -61,6 +62,7 @@
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(257, 23);
             textBox1.TabIndex = 1;
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // textBox2
             // 
@@ -94,15 +96,10 @@
             // 
             // label3
             // 
-            label3.AutoSize = true;
-            label3.FlatStyle = FlatStyle.System;
-            label3.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(248, 119);
+            label3.Location = new Point(0, 0);
             label3.Name = "label3";
-            label3.Size = new Size(256, 37);
-            label3.TabIndex = 5;
-            label3.Text = "Log In to Software";
-            label3.Click += label3_Click;
+            label3.Size = new Size(100, 23);
+            label3.TabIndex = 8;
             // 
             // label4
             // 
@@ -129,12 +126,24 @@
             label5.Text = "Usuario o contraseña incorrectos";
             label5.Visible = false;
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.FlatStyle = FlatStyle.System;
+            label6.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label6.Location = new Point(268, 119);
+            label6.Name = "label6";
+            label6.Size = new Size(210, 37);
+            label6.TabIndex = 9;
+            label6.Text = "Log In Sofware";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlLightLight;
             ClientSize = new Size(724, 460);
+            Controls.Add(label6);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -146,7 +155,6 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Name = "Form1";
             Text = "Form1";
-            Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -161,5 +169,6 @@
         private Label label3;
         private Label label4;
         private Label label5;
+        private Label label6;
     }
 }
