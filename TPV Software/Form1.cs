@@ -8,7 +8,7 @@ namespace TPV_Software
     public partial class Form1 : Form
     {
         // Ruta de tu base de datos (actualízala con la ubicación real del archivo .accdb)
-        private string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\2dam3\Documents\Database1.accdb;";
+        private string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../../", "Database1.accdb")};";
 
         public Form1()
         {

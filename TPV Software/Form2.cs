@@ -8,28 +8,36 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Aspose.Pdf;
+using Aspose.Pdf.Text;
+
+
 
 namespace TPV_Software
 {
     public partial class Form2 : Form
     {
-        private string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\2dam3\Documents\Database1.accdb;";
+        private string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../../", "Database1.accdb")};";
         private Boolean stock = false;
         private Boolean user = false;
         private Boolean reserva = false;
         public Form2()
         {
             InitializeComponent();
+           
             iniciotablas();
             dataGridView1.SelectionChanged += dataGridSeleccion;
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Form1 form1 = new Form1();
+            form1.Show();
+            this.Hide();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -471,7 +479,7 @@ namespace TPV_Software
         // Método para mostrar las reservas de una fecha específica
         private void MostrarReservasPorFecha(DateTime fecha)
         {
-            if (reserva==true)
+            if (reserva == true)
             {
 
                 try
@@ -506,5 +514,117 @@ namespace TPV_Software
                 }
             }
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            TransferirDatosAInforme();
+            GenerarInformeStock();
+
+        }
+
+        private void TransferirDatosAInforme()
+        {
+            try
+            {
+                using (OleDbConnection connection = new OleDbConnection(connectionString))
+                {
+                    connection.Open();
+
+                    // Eliminar datos existentes en la tabla informe
+                    string deleteQuery = "DELETE FROM informe";
+                    using (OleDbCommand deleteCommand = new OleDbCommand(deleteQuery, connection))
+                    {
+                        deleteCommand.ExecuteNonQuery();
+                    }
+
+                    // Insertar datos de la tabla productos en la tabla informe
+                    string insertQuery = @"
+                        INSERT INTO informe (id, articulo, cantidad_disponible, precio, mínimo_disponible)
+                        SELECT Id, Articulo, Cantidad, Importe, 10 FROM productos";
+
+                    using (OleDbCommand insertCommand = new OleDbCommand(insertQuery, connection))
+                    {
+                        insertCommand.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al transferir datos: " + ex.Message);
+            }
+        }
+
+
+        
+     private void GenerarInformeStock()
+        {
+            try
+            {
+                TransferirDatosAInforme();
+
+                using (OleDbConnection connection = new OleDbConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM informe";
+
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(query, connection))
+                    {
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
+
+                        Aspose.Pdf.Document document = new Aspose.Pdf.Document();
+
+                        string pdfPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../../", "InformeStock.pdf");
+
+                        Page page = document.Pages.Add();
+                   
+                        TextFragment title = new TextFragment("Informe de Stock Disponible");
+                        title.TextState.FontSize = 18;
+                        title.TextState.FontStyle = FontStyles.Bold;
+                        title.HorizontalAlignment = Aspose.Pdf.HorizontalAlignment.Center;
+                        page.Paragraphs.Add(title);
+
+                        page.Paragraphs.Add(new TextFragment(" "));
+
+                        string header = $"{"ID",-5} {"Artículo",-11} {"Cantidad Disponible",-15} {"Precio",-10} {"Mínimo Disponible",-10}";
+                        TextFragment headerFragment = new TextFragment(header);
+                        headerFragment.TextState.FontStyle = FontStyles.Bold;
+                        headerFragment.TextState.Font = FontRepository.FindFont("Courier New");
+                        page.Paragraphs.Add(headerFragment);
+
+                        TextFragment separator = new TextFragment(new string('-', 69));
+                        separator.TextState.Font = FontRepository.FindFont("Courier New"); 
+                        page.Paragraphs.Add(separator);
+
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            string line = $"{row["id"],-5} {row["articulo"],-12} {row["cantidad_disponible"],-19} {row["precio"],-13} {row["mínimo_disponible"],-20}";
+                            TextFragment textFragment = new TextFragment(line);
+                            textFragment.TextState.Font = FontRepository.FindFont("Courier New"); 
+
+                            //cambio el color
+                            if (Convert.ToInt32(row["cantidad_disponible"]) < Convert.ToInt32(row["mínimo_disponible"]))
+                            {
+                                textFragment.TextState.ForegroundColor = Aspose.Pdf.Color.Red;
+                            }
+                            page.Paragraphs.Add(textFragment);
+                        }
+
+
+                        document.Save(pdfPath);
+
+                        MessageBox.Show("Informe de stock generado correctamente en " + pdfPath);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al generar el informe: " + ex.Message);
+            }
+        }
+
+
+
+
     }
 }

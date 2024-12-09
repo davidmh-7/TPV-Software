@@ -15,7 +15,7 @@ namespace TPV_Software
 {
     public partial class Form3 : Form
     {
-        private string connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\2dam3\Documents\Database1.accdb;";
+        private string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "../../../../../", "Database1.accdb")};";
         private Boolean stock = false;
         private Boolean user = false;
         private Boolean reserva = false;
@@ -286,9 +286,16 @@ namespace TPV_Software
             }
         }
 
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            Form1 form1 = new Form1();
+            form1.Show();
+            this.Hide();
+        }
 
+        private void button4_Click(object sender, EventArgs e)
+        {
 
-
-
+        }
     }
 }

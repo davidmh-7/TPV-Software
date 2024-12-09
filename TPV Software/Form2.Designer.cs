@@ -134,7 +134,7 @@
             button5.Name = "button5";
             button5.Size = new Size(79, 31);
             button5.TabIndex = 13;
-            button5.Text = "Cerrar app";
+            button5.Text = "Cerrar";
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
             // 
@@ -146,9 +146,9 @@
             label4.ForeColor = SystemColors.ControlDarkDark;
             label4.Location = new Point(191, 55);
             label4.Name = "label4";
-            label4.Size = new Size(251, 13);
+            label4.Size = new Size(284, 13);
             label4.TabIndex = 14;
-            label4.Text = "Enter your information to login in your account";
+            label4.Text = "En esta pestaña podra realizar los cambios que quiera";
             // 
             // notifyIcon1
             // 
@@ -185,8 +185,9 @@
             button6.Name = "button6";
             button6.Size = new Size(106, 86);
             button6.TabIndex = 16;
-            button6.Text = "Imprimir";
+            button6.Text = "Imprimir PDF";
             button6.UseVisualStyleBackColor = false;
+            button6.Click += button6_Click;
             // 
             // button4
             // 
